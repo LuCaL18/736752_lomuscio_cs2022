@@ -16,6 +16,7 @@ abstract class AbstractSmartphone implements Smartphone {
 	protected String processore;
 	protected String risoluzione;
 	protected String nomeDispositivo;
+	protected String marca;
 
 	/**
 	 * @param iMEI
@@ -25,9 +26,10 @@ abstract class AbstractSmartphone implements Smartphone {
 	 * @param processore
 	 * @param risoluzione
 	 * @param nomeDispositivo
+	 * @param marca
 	 */
 	public AbstractSmartphone(int iMEI, String modello, int memoria, int ram, String processore, String risoluzione,
-			String nomeDispositivo) {
+			String nomeDispositivo, String marca) {
 		IMEI = iMEI;
 		this.modello = modello;
 		this.memoria = memoria;
@@ -35,6 +37,7 @@ abstract class AbstractSmartphone implements Smartphone {
 		this.processore = processore;
 		this.risoluzione = risoluzione;
 		this.nomeDispositivo = nomeDispositivo;
+		this.marca = marca;
 	}
 
 	@Override
@@ -70,6 +73,18 @@ abstract class AbstractSmartphone implements Smartphone {
 	@Override
 	public int getMemoria() {
 		return memoria;
+	}
+
+	@Override
+	public String getMarca() {
+		return marca;
+	}
+
+	@Override
+	public String toString() {
+		return "AbstractSmartphone [IMEI=" + IMEI + ", modello=" + modello + ", memoria=" + memoria + ", ram=" + ram
+				+ ", processore=" + processore + ", risoluzione=" + risoluzione + ", nomeDispositivo=" + nomeDispositivo
+				+ ", marca=" + marca + "]";
 	}
 
 }

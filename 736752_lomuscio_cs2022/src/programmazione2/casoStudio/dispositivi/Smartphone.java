@@ -18,8 +18,13 @@ public interface Smartphone {
 	public String getRisoluzione();
 
 	public String getNomeDispositivo();
+	
+	public String getMarca();
 
 	public int getRam();
 	
 	public int getMemoria();
+	
+	@Override
+	public String toString();
 }
