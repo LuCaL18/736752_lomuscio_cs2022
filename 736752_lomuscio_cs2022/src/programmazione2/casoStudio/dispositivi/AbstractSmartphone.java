@@ -3,6 +3,8 @@
  */
 package programmazione2.casoStudio.dispositivi;
 
+import java.util.Objects;
+
 /**
  * @author lucal
  *
@@ -78,6 +80,23 @@ abstract class AbstractSmartphone implements Smartphone {
 	@Override
 	public String getMarca() {
 		return marca;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(IMEI);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractSmartphone other = (AbstractSmartphone) obj;
+		return IMEI == other.IMEI;
 	}
 
 	@Override
