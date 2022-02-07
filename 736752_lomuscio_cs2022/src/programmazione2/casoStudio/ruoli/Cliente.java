@@ -52,12 +52,6 @@ public class Cliente extends AbstractPersona {
 		return Objects.equals(codiceFiscale, other.codiceFiscale);
 	}
 
-	@Override
-	public String toString() {
-		return "Cliente [codiceFiscale=" + codiceFiscale + ", nome=" + nome + ", cognome=" + cognome
-				+ ", dataDiNascita=" + dataDiNascita + "]";
-	}
-
 	/**
 	 * @param mAX_NOLEGGI the mAX_NOLEGGI to set
 	 */
@@ -70,8 +64,13 @@ public class Cliente extends AbstractPersona {
 		if ((this.smartphoneNoleggiati + noleggio.getSmartphoneNoleggiati().size()) > MAX_NOLEGGI) {
 			throw new ClienteException("numero smartphone noleggiati per cliente oltre il limite");
 		}
-		noleggi.add(noleggio);
 		this.smartphoneNoleggiati += noleggio.getSmartphoneNoleggiati().size();
+	}
+
+	@Override
+	public String toString() {
+		return "Cliente [codiceFiscale=" + codiceFiscale + ", nome=" + nome + ", cognome=" + cognome
+				+ ", dataDiNascita=" + dataDiNascita + ", smartphoneNoleggiati=" + smartphoneNoleggiati + "]";
 	}
 
 }

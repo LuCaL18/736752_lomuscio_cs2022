@@ -65,14 +65,13 @@ public class Dipendente extends AbstractPersona {
 		if ((this.smartphoneNoleggiati + noleggio.getSmartphoneNoleggiati().size()) > MAX_NOLEGGI) {
 			throw new DipendenteException("numero smartphone noleggiati per dipendente oltre il limite");
 		}
-		noleggi.add(noleggio);
 		this.smartphoneNoleggiati += noleggio.getSmartphoneNoleggiati().size();
 	}
 
 	@Override
 	public String toString() {
 		return "Dipendente [id=" + id + ", nome=" + nome + ", cognome=" + cognome + ", dataDiNascita=" + dataDiNascita
-				+ "]";
+				+ ", smartphoneNoleggiati=" + smartphoneNoleggiati + "]";
 	}
 
 }

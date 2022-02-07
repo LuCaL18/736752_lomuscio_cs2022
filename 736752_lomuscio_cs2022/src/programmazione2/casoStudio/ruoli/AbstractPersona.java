@@ -3,9 +3,7 @@
  */
 package programmazione2.casoStudio.ruoli;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import programmazione2.casoStudio.azioni.Noleggio;
 
@@ -18,7 +16,6 @@ abstract class AbstractPersona {
 	protected String nome;
 	protected String cognome;
 	protected Date dataDiNascita;
-	protected List<Noleggio> noleggi = new ArrayList<Noleggio>();
 	protected int smartphoneNoleggiati = 0;
 
 	/**
@@ -51,13 +48,6 @@ abstract class AbstractPersona {
 	 */
 	public Date getDataDiNascita() {
 		return dataDiNascita;
-	}
-
-	/**
-	 * @return the noleggi
-	 */
-	public List<Noleggio> getNoleggi() {
-		return noleggi;
 	}
 
 	/**
