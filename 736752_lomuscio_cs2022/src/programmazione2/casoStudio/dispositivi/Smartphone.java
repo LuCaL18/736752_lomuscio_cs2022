@@ -3,11 +3,13 @@
  */
 package programmazione2.casoStudio.dispositivi;
 
+import java.lang.Cloneable;
+
 /**
  * @author lucal
  *
  */
-public interface Smartphone {
+public interface Smartphone extends Cloneable {
 
 	public int getIMEI();
 
@@ -24,5 +26,9 @@ public interface Smartphone {
 	public int getRam();
 
 	public int getMemoria();
+
+	public Smartphone clone();
+
+	public String toString();
 
 }

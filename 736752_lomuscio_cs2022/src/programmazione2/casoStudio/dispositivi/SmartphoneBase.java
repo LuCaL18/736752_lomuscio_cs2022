@@ -100,6 +100,18 @@ public class SmartphoneBase implements Smartphone {
 	}
 
 	@Override
+	public Smartphone clone() {
+		Smartphone result = null;
+		try {
+			result = (Smartphone) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	@Override
 	public String toString() {
 		return "SmartphoneBase [IMEI=" + IMEI + ", modello=" + modello + ", memoria=" + memoria + ", ram=" + ram
 				+ ", processore=" + processore + ", risoluzione=" + risoluzione + ", nomeDispositivo=" + nomeDispositivo

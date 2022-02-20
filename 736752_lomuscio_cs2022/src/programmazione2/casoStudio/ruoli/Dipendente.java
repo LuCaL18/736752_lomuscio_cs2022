@@ -62,10 +62,10 @@ public class Dipendente extends AbstractPersona {
 
 	@Override
 	public void addNoleggio(Noleggio noleggio) throws DipendenteException {
-		if ((this.smartphoneNoleggiati + noleggio.getSmartphoneNoleggiati().size()) > MAX_NOLEGGI) {
+		if ((this.smartphoneNoleggiati + noleggio.getSmartphone().size()) > MAX_NOLEGGI) {
 			throw new DipendenteException("numero smartphone noleggiati per dipendente oltre il limite");
 		}
-		this.smartphoneNoleggiati += noleggio.getSmartphoneNoleggiati().size();
+		this.smartphoneNoleggiati += noleggio.getSmartphone().size();
 	}
 
 	@Override
