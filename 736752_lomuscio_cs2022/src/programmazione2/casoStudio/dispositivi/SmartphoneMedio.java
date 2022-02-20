@@ -7,7 +7,7 @@ package programmazione2.casoStudio.dispositivi;
  * @author lucal
  *
  */
-public class SmartphoneMedio extends AbstractSmartphone {
+public class SmartphoneMedio extends SmartphoneBase {
 
 	protected boolean doppiaFotocamera = true;
 
