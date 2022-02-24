@@ -6,8 +6,6 @@ package programmazione2.casoStudio.ruoli;
 import java.util.Date;
 import java.util.Objects;
 
-import programmazione2.casoStudio.azioni.Noleggio;
-
 /**
  * @author lucal
  *
@@ -61,11 +59,11 @@ public class Dipendente extends AbstractPersona {
 	}
 
 	@Override
-	public void addNoleggio(Noleggio noleggio) throws DipendenteException {
-		if ((this.smartphoneNoleggiati + noleggio.getSmartphone().size()) > MAX_NOLEGGI) {
+	public void addNoleggio(int smartphoneDaNoleggiare) throws DipendenteException {
+		if ((this.smartphoneNoleggiati + smartphoneDaNoleggiare) > MAX_NOLEGGI) {
 			throw new DipendenteException("numero smartphone noleggiati per dipendente oltre il limite");
 		}
-		this.smartphoneNoleggiati += noleggio.getSmartphone().size();
+		this.smartphoneNoleggiati += smartphoneDaNoleggiare;
 	}
 
 	@Override

@@ -5,13 +5,11 @@ package programmazione2.casoStudio.ruoli;
 
 import java.util.Date;
 
-import programmazione2.casoStudio.azioni.Noleggio;
-
 /**
  * @author lucal
  *
  */
-abstract class AbstractPersona {
+abstract class AbstractPersona implements Persona {
 
 	protected String nome;
 	protected String cognome;
@@ -32,6 +30,7 @@ abstract class AbstractPersona {
 	/**
 	 * @return the nome
 	 */
+	@Override
 	public String getNome() {
 		return nome;
 	}
@@ -39,6 +38,7 @@ abstract class AbstractPersona {
 	/**
 	 * @return the cognome
 	 */
+	@Override
 	public String getCognome() {
 		return cognome;
 	}
@@ -46,6 +46,7 @@ abstract class AbstractPersona {
 	/**
 	 * @return the dataDiNascita
 	 */
+	@Override
 	public Date getDataDiNascita() {
 		return dataDiNascita;
 	}
@@ -53,10 +54,12 @@ abstract class AbstractPersona {
 	/**
 	 * @param smartphoneNoleggiati the smartphoneNoleggiati to set
 	 */
-	public void setSmartphoneNoleggiati() {
-		this.smartphoneNoleggiati = 0;
+	@Override
+	public void setSmartphoneNoleggiati(int smartphoneNonPiuNoleggiati) {
+		this.smartphoneNoleggiati -= smartphoneNonPiuNoleggiati;
 	}
 
-	public abstract void addNoleggio(Noleggio noleggio) throws Exception;
+	@Override
+	public abstract void addNoleggio(int smartphoneDaNoleggiare) throws Exception;
 
 }

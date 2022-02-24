@@ -11,7 +11,7 @@ import programmazione2.casoStudio.azioni.Transazione;
  * @author lucal
  *
  */
-public class ComparatorTransazione implements Comparator<Transazione> {
+public class ComparatorTransazioneData implements Comparator<Transazione> {
 
 	@Override
 	public int compare(Transazione o1, Transazione o2) {
