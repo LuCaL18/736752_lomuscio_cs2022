@@ -22,4 +22,7 @@ public interface Transazione {
 	public double getPrezzo();
 
 	public Dipendente getDipendente();
+
+	public void addSmartphone(Smartphone smartphone);
+
 }

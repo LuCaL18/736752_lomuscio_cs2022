@@ -32,6 +32,7 @@ abstract class AbstractTransazione implements Transazione {
 		this.data = data;
 		this.prezzo = prezzo;
 		this.dipendente = dipendente;
+
 	}
 
 	@Override
@@ -52,6 +53,11 @@ abstract class AbstractTransazione implements Transazione {
 	@Override
 	public Dipendente getDipendente() {
 		return dipendente;
+	}
+	
+	@Override
+	public void addSmartphone(Smartphone smartphone) {
+		this.smartphone.add(smartphone);
 	}
 
 }
