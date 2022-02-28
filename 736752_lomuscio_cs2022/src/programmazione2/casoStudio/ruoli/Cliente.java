@@ -12,6 +12,10 @@ import java.util.Objects;
  */
 public class Cliente extends AbstractPersona {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3949733657807779459L;
 	private String codiceFiscale;
 	private static int MAX_NOLEGGI;
 
@@ -20,9 +24,12 @@ public class Cliente extends AbstractPersona {
 	 * @param cognome
 	 * @param dataDiNascita
 	 * @param codiceFiscale
+	 * @throws ClienteException
 	 */
-	public Cliente(String nome, String cognome, Date dataDiNascita, String codiceFiscale) {
+	public Cliente(String nome, String cognome, Date dataDiNascita, String codiceFiscale) throws ClienteException {
 		super(nome, cognome, dataDiNascita);
+		if (!codiceFiscale.matches("^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$"))
+			throw new ClienteException("Codice fiscale non valido");
 		this.codiceFiscale = codiceFiscale;
 	}
 

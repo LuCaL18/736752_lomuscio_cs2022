@@ -9,6 +9,10 @@ package programmazione2.casoStudio.dispositivi;
  */
 public class SmartphoneMedio extends SmartphoneBase {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6467384657363053232L;
 	protected boolean doppiaFotocamera = true;
 
 	/**

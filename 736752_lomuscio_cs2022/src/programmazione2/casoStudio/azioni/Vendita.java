@@ -14,6 +14,11 @@ import programmazione2.casoStudio.ruoli.Dipendente;
 public class Vendita extends AbstractTransazione {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8637109900101954444L;
+
+	/**
 	 * @param data
 	 * @param prezzo
 	 * @param dipendente

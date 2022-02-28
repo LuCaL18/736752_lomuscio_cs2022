@@ -9,6 +9,10 @@ package programmazione2.casoStudio.dispositivi;
  */
 public class SmartphoneAvanzato extends SmartphoneMedio {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3618269235228362726L;
 	private boolean riconoscimentoVocale = true;
 	private boolean riconoscimentoImpronta = true;
 

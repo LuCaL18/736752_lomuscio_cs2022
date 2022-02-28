@@ -3,14 +3,19 @@
  */
 package programmazione2.casoStudio.ruoli;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author lucal
  *
  */
-abstract class AbstractPersona implements Persona {
+abstract class AbstractPersona implements Persona,Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9074543292718853482L;
 	protected String nome;
 	protected String cognome;
 	protected Date dataDiNascita;
