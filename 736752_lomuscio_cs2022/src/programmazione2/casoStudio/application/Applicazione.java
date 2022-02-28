@@ -15,7 +15,10 @@ import programmazione2.casoStudio.azioni.Noleggio;
 import programmazione2.casoStudio.azioni.Vendita;
 import programmazione2.casoStudio.dispositivi.Smartphone;
 import programmazione2.casoStudio.dispositivi.SmartphoneAvanzato;
+import programmazione2.casoStudio.ruoli.Cliente;
+import programmazione2.casoStudio.ruoli.ClienteException;
 import programmazione2.casoStudio.ruoli.Dipendente;
+import programmazione2.casoStudio.ruoli.DipendenteException;
 import programmazione2.casoStudio.util.ComparatorTransazioneData;
 
 /**
@@ -24,8 +27,8 @@ import programmazione2.casoStudio.util.ComparatorTransazioneData;
  */
 public class Applicazione {
 
-	// private Set<Dipendente> dipendenti = new HashSet<Dipendente>();
-	// private List<Cliente> clienti = new ArrayList<Cliente>();
+	private Set<Dipendente> dipendenti;
+	private Set<Cliente> clienti;
 	private List<Vendita> vendite;
 	private List<Noleggio> noleggi;
 	private Set<Smartphone> catalogoSmartphone;
@@ -34,6 +37,8 @@ public class Applicazione {
 		this.vendite = new LinkedList<Vendita>();
 		this.noleggi = new LinkedList<Noleggio>();
 		this.catalogoSmartphone = new HashSet<Smartphone>();
+		this.clienti = new HashSet<Cliente>();
+		this.dipendenti = new HashSet<Dipendente>();
 	}
 
 	/**
@@ -47,9 +52,82 @@ public class Applicazione {
 		this.catalogoSmartphone = catalogoSmartphone;
 	}
 
-	public void printMenu() {
-		System.out.println("1.vendita telefono\n" + "2.noleggio telefono\n" + "3.elenco smartphone noleggiati\n"
-				+ "4.elenco smartphone mai noleggiati\n" + "5.smartphone venduti da un dipendente\n" + "6.esci\n");
+	/**
+	 * @return the dipendenti
+	 */
+	public Set<Dipendente> getDipendenti() {
+		return dipendenti;
+	}
+
+	/**
+	 * @param dipendenti the dipendenti to set
+	 */
+	public void setDipendenti(Set<Dipendente> dipendenti) {
+		this.dipendenti = dipendenti;
+	}
+
+	/**
+	 * @return the clienti
+	 */
+	public Set<Cliente> getClienti() {
+		return clienti;
+	}
+
+	/**
+	 * @param clienti the clienti to set
+	 */
+	public void setClienti(Set<Cliente> clienti) {
+		this.clienti = clienti;
+	}
+
+	/**
+	 * @return the vendite
+	 */
+	public List<Vendita> getVendite() {
+		return vendite;
+	}
+
+	/**
+	 * @param vendite the vendite to set
+	 */
+	public void setVendite(List<Vendita> vendite) {
+		this.vendite = vendite;
+	}
+
+	/**
+	 * @return the noleggi
+	 */
+	public List<Noleggio> getNoleggi() {
+		return noleggi;
+	}
+
+	/**
+	 * @param noleggi the noleggi to set
+	 */
+	public void setNoleggi(List<Noleggio> noleggi) {
+		this.noleggi = noleggi;
+	}
+
+	/**
+	 * @return the catalogoSmartphone
+	 */
+	public Set<Smartphone> getCatalogoSmartphone() {
+		return catalogoSmartphone;
+	}
+
+	/**
+	 * @param catalogoSmartphone the catalogoSmartphone to set
+	 */
+	public void setCatalogoSmartphone(Set<Smartphone> catalogoSmartphone) {
+		this.catalogoSmartphone = catalogoSmartphone;
+	}
+
+	public String menu() {
+		String result = "1.aggiungi Smartphone\n" + "2.nuovo cliente\n" + "3.nuovo dipendente\n"
+				+ "4.rimuovi dipendente\n" + "5.vendita telefono\n" + "6.noleggio telefono\n"
+				+ "7.elenco smartphone noleggiati\n" + "8.elenco smartphone mai noleggiati\n"
+				+ "9.smartphone venduti da un dipendente\n" + "10.fine noleggio\n" + "11.esci\n";
+		return result;
 	}
 
 	public void addSmartphone(Smartphone smartphone) throws AppException {
@@ -66,7 +144,7 @@ public class Applicazione {
 		catalogoSmartphone.remove(smartphone);
 	}
 
-	public void venditaSmartphone(Vendita vendita) throws AppException {
+	public void venditaSmartphone(Vendita vendita, Cliente cliente) throws AppException {
 		for (Smartphone smartphone : vendita.getSmartphone()) {
 			if (!catalogoSmartphone.contains(smartphone) || smartphone.getClass() == SmartphoneAvanzato.class)
 				throw new AppException("lo smartphone con IMEI" + smartphone.getIMEI() + "non acquistabile");
@@ -75,7 +153,11 @@ public class Applicazione {
 		this.catalogoSmartphone.removeAll(vendita.getSmartphone());
 	}
 
-	public void noleggiaSmartphone(Noleggio noleggio) throws AppException {
+	public void noleggiaSmartphone(Noleggio noleggio, Cliente cliente)
+			throws AppException, ClienteException, DipendenteException {
+		int numSmartphone = noleggio.getSmartphone().size();
+		cliente.addNoleggio(numSmartphone);
+		noleggio.getDipendente().addNoleggio(numSmartphone);
 		for (Smartphone smartphone : noleggio.getSmartphone()) {
 			if (!catalogoSmartphone.contains(smartphone))
 				throw new AppException("impossibile noleggiare smartphone");
@@ -84,14 +166,17 @@ public class Applicazione {
 		this.catalogoSmartphone.removeAll(noleggio.getSmartphone());
 	}
 
-	/*
-	 * public void addDipendente(Dipendente dipendente) {
-	 * this.dipendenti.add(dipendente); }
-	 * 
-	 * public void removeDipendente(String idDipendente) { for (Dipendente
-	 * dipendente : dipendenti) { if (dipendente.getId() == idDipendente) {
-	 * this.dipendenti.remove(dipendente); } } }
-	 */
+	public void addDipendente(Dipendente dipendente) {
+		this.dipendenti.add(dipendente);
+	}
+
+	public void removeDipendente(String idDipendente) throws AppException {
+		dipendenti.remove(this.getDipendenteDaCodice(idDipendente));
+	}
+
+	public void addCliente(Cliente cliente) {
+		this.clienti.add(cliente);
+	}
 
 	public Set<Smartphone> elencoSmartphoneNoleggiati() {
 		Set<Smartphone> elenco = new LinkedHashSet<Smartphone>();
@@ -143,16 +228,34 @@ public class Applicazione {
 		return null;
 	}
 
-	public boolean fineNoleggio(Noleggio noleggioFinito) {
+	public boolean fineNoleggio(int codiceNoleggio) {
 		boolean result = true;
 		for (Noleggio noleggio : noleggi) {
-			if (noleggio.equals(noleggioFinito)) {
+			if (noleggio.getCodiceTransazione() == codiceNoleggio) {
 				if (noleggio.getDataFine().before(new Date()))
 					result = false;
 				catalogoSmartphone.addAll(noleggio.getSmartphone());
 			}
 		}
 		return result;
+	}
+
+	public Dipendente getDipendenteDaCodice(String codiceDipendente) throws AppException {
+		for (Dipendente dipendente : dipendenti) {
+			if (dipendente.getId() == codiceDipendente) {
+				return dipendente;
+			}
+		}
+		throw new AppException("il dipendente inserito non esiste");
+	}
+
+	public Cliente getClienteDaCodice(String codiceFiscale) throws AppException {
+		for (Cliente cliente : clienti) {
+			if (cliente.getCodiceFiscale() == codiceFiscale) {
+				return cliente;
+			}
+		}
+		throw new AppException("il dipendente inserito non esiste");
 	}
 
 }

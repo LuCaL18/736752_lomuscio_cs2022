@@ -12,6 +12,10 @@ import java.util.Objects;
  */
 public class Dipendente extends AbstractPersona {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6181282734302979351L;
 	private String id;
 	private static int MAX_NOLEGGI;
 

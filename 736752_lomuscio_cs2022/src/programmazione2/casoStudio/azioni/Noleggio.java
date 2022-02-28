@@ -13,6 +13,10 @@ import programmazione2.casoStudio.ruoli.Dipendente;
  */
 public class Noleggio extends AbstractTransazione {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3657175547272007713L;
 	private Date dataFine;
 
 	/**

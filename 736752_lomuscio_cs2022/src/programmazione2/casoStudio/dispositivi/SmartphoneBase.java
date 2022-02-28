@@ -3,14 +3,19 @@
  */
 package programmazione2.casoStudio.dispositivi;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * @author lucal
  *
  */
-public class SmartphoneBase implements Smartphone {
+public class SmartphoneBase implements Smartphone,Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2863242326712831696L;
 	protected int IMEI;
 	protected String modello;
 	protected int memoria;
