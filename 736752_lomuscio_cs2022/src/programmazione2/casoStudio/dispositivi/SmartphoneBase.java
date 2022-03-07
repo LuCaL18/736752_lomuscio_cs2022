@@ -16,7 +16,7 @@ public class SmartphoneBase implements Smartphone,Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2863242326712831696L;
-	protected int IMEI;
+	protected long IMEI;
 	protected String modello;
 	protected int memoria;
 	protected int ram;
@@ -35,7 +35,7 @@ public class SmartphoneBase implements Smartphone,Serializable {
 	 * @param nomeDispositivo
 	 * @param marca
 	 */
-	public SmartphoneBase(int iMEI, String modello, int memoria, int ram, String processore, String risoluzione,
+	public SmartphoneBase(long iMEI, String modello, int memoria, int ram, String processore, String risoluzione,
 			String nomeDispositivo, String marca) {
 		IMEI = iMEI;
 		this.modello = modello;
@@ -48,7 +48,7 @@ public class SmartphoneBase implements Smartphone,Serializable {
 	}
 
 	@Override
-	public int getIMEI() {
+	public long getIMEI() {
 		return IMEI;
 	}
 

@@ -10,7 +10,7 @@ import java.util.Date;
  * @author lucal
  *
  */
-abstract class AbstractPersona implements Persona,Serializable {
+abstract class AbstractPersona implements Persona, Serializable {
 
 	/**
 	 * 
@@ -19,6 +19,7 @@ abstract class AbstractPersona implements Persona,Serializable {
 	protected String nome;
 	protected String cognome;
 	protected Date dataDiNascita;
+	protected String luogoDiNascita;
 	protected int smartphoneNoleggiati = 0;
 
 	/**
@@ -26,10 +27,11 @@ abstract class AbstractPersona implements Persona,Serializable {
 	 * @param cognome
 	 * @param dataDiNascita
 	 */
-	public AbstractPersona(String nome, String cognome, Date dataDiNascita) {
+	public AbstractPersona(String nome, String cognome, Date dataDiNascita, String luogoDiNascita) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dataDiNascita = dataDiNascita;
+		this.luogoDiNascita = luogoDiNascita;
 	}
 
 	/**
@@ -57,11 +59,19 @@ abstract class AbstractPersona implements Persona,Serializable {
 	}
 
 	/**
+	 * @return the luogoDiNascita
+	 */
+	@Override
+	public String getLuogoDiNascita() {
+		return luogoDiNascita;
+	}
+
+	/**
 	 * @param smartphoneNoleggiati the smartphoneNoleggiati to set
 	 */
 	@Override
-	public void setSmartphoneNoleggiati(int smartphoneNonPiuNoleggiati) {
-		this.smartphoneNoleggiati -= smartphoneNonPiuNoleggiati;
+	public void resetSmartphoneNoleggiati() {
+		this.smartphoneNoleggiati = 0;
 	}
 
 	@Override

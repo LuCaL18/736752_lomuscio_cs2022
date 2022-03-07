@@ -3,19 +3,19 @@
  */
 package programmazione2.casoStudio.application;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import programmazione2.casoStudio.azioni.Noleggio;
 import programmazione2.casoStudio.azioni.Vendita;
@@ -27,6 +27,7 @@ import programmazione2.casoStudio.ruoli.Cliente;
 import programmazione2.casoStudio.ruoli.ClienteException;
 import programmazione2.casoStudio.ruoli.Dipendente;
 import programmazione2.casoStudio.ruoli.DipendenteException;
+import programmazione2.casoStudio.util.Serializator;
 
 /**
  * @author lucal
@@ -34,179 +35,220 @@ import programmazione2.casoStudio.ruoli.DipendenteException;
  */
 public class Main {
 
-	String currentDirectory = "..//fileSerializzati";
+	private static String currentDirectory = "..//fileSerializzati/";
+	private static BufferedReader stdin;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Applicazione app = new Applicazione();
-		Main main = new Main();
-		Scanner scan = new Scanner(System.in);
-		int scelta = 0;
 
-		System.out.println("-------------------------\n" + "BENVENUTI\n" + "-------------------------");
+		try {
+			Applicazione app = new Applicazione();
+			fetchData(app);
+			stdin = new BufferedReader(new InputStreamReader(System.in));
 
-		while (scelta != 11) {
-			System.out.println(app.menu());
-			System.out.print("scelta: ");
+			int scelta = 0;
 
-			scelta = scan.nextInt();
+			System.out.println("-------------------------\n" + "BENVENUTI\n" + "-------------------------");
 
-			switch (scelta) {
-			case 1:
-				main.addSmartphone(app);
-				break;
-			case 2:
-				main.creaCliente(app);
-				break;
-			case 3:
-				main.creaDipendente(app);
-				break;
-			case 4:
-				main.removeDipendente(app);
-				break;
-			case 5:
-				main.venditaSmartphone(app);
-				break;
-			case 6:
-				main.noleggioSmartphone(app);
-				break;
-			case 7:
-				main.elencoSmartphoneNoleggiati(app);
-				break;
-			case 8:
-				main.elencoSMartphoneMaiNoleggiati(app);
-				break;
-			case 9:
-				main.elencoSmartphoneVendutiDaDipendente(app);
-				break;
-			case 10:
-				main.fineNoleggio(app);
-				break;
-			case 11:
-				main.serializzaOggetto(app.getNoleggi(), "noleggi_serializzati");
-				main.serializzaOggetto(app.getVendite(), "vendite_serializzate");
-				break;
-			default:
-				System.out.println("nessuna operazione effettuata");
+			while (scelta != 11) {
+				try {
+					System.out.println(app.menu());
+					System.out.print("scelta:");
+
+					scelta = Integer.parseInt(stdin.readLine());
+
+					switch (scelta) {
+					case 1:
+						addSmartphone(app);
+						break;
+					case 2:
+						creaCliente(app);
+						break;
+					case 3:
+						creaDipendente(app);
+						break;
+					case 4:
+						removeDipendente(app);
+						break;
+					case 5:
+						venditaSmartphone(app);
+						break;
+					case 6:
+						noleggioSmartphone(app);
+						break;
+					case 7:
+						elencoSmartphoneNoleggiati(app);
+						break;
+					case 8:
+						elencoSMartphoneMaiNoleggiati(app);
+						break;
+					case 9:
+						elencoSmartphoneVendutiDaDipendente(app);
+						break;
+					case 10:
+						fineNoleggio(app);
+						break;
+					case 11:
+						Serializator.serializzaOggetto(app.getNoleggi(), currentDirectory + "noleggi");
+						Serializator.serializzaOggetto(app.getVendite(), currentDirectory + "vendite");
+						app.close();
+						break;
+					default:
+						System.out.println("nessuna operazione effettuata");
+					}
+				} catch (NumberFormatException e) {
+					System.out.println(e.getMessage());
+				}
 			}
+			System.out.println("ARRIVEDERCI");
+			stdin.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		System.out.println("ARRIVEDERCI");
-		scan.close();
 
 	}
 
-	public void creaCliente(Applicazione app) {
-		Scanner scan = new Scanner(System.in);
+	/**
+	 * 
+	 * @param app
+	 */
+	@SuppressWarnings("unchecked")
+	private static void fetchData(Applicazione app) {
+
+		Set<Cliente> clienti = (Set<Cliente>) Serializator.deserializzaOggetto(currentDirectory + "clienti");
+		app.setClienti(clienti != null ? clienti : new HashSet<Cliente>());
+
+		Set<Dipendente> dipendenti = (Set<Dipendente>) Serializator
+				.deserializzaOggetto(currentDirectory + "dipendenti");
+		app.setDipendenti(dipendenti != null ? dipendenti : new HashSet<Dipendente>());
+
+		Set<Smartphone> smartphone = (Set<Smartphone>) Serializator
+				.deserializzaOggetto(currentDirectory + "catalogo_smartphone");
+		app.setCatalogoSmartphone(smartphone != null ? smartphone : new HashSet<Smartphone>());
+
+		List<Noleggio> noleggi = (List<Noleggio>) Serializator.deserializzaOggetto(currentDirectory + "noleggi");
+		app.setNoleggi(noleggi != null ? noleggi : new LinkedList<Noleggio>());
+
+		List<Vendita> vendite = (List<Vendita>) Serializator.deserializzaOggetto(currentDirectory + "vendite");
+		app.setVendite(vendite != null ? vendite : new LinkedList<Vendita>());
+	}
+
+	private static void creaCliente(Applicazione app) throws IOException {
 		boolean risp = true;
 
 		while (risp) {
 			try {
-				System.out.print("Inserire nome");
-				String nome = scan.nextLine();
+				System.out.print("Inserire nome: ");
+				String nome = stdin.readLine();
 
-				System.out.print("Inserire cognome");
-				String cognome = scan.nextLine();
+				System.out.print("Inserire cognome: ");
+				String cognome = stdin.readLine();
 
-				System.out.print("Inserire data di nascita");
-				Date dataDiNascita = new SimpleDateFormat("dd/MM/yyyy").parse(scan.nextLine());
+				System.out.print("Inserire data di nascita(dd/MM/yyyy): ");
+				Date dataDiNascita = new SimpleDateFormat("dd/MM/yyyy").parse(stdin.readLine());
 
-				System.out.print("Inserire codice fiscale");
-				String codiceFiscale = scan.nextLine();
-				Cliente newCliente = new Cliente(nome, cognome, dataDiNascita, codiceFiscale);
+				System.out.print("Inserire luogo di nascita: ");
+				String luogoDiNascita = stdin.readLine();
+
+				System.out.print("Inserire codice fiscale: ");
+				String codiceFiscale = stdin.readLine();
+				Cliente newCliente = new Cliente(nome, cognome, dataDiNascita, luogoDiNascita, codiceFiscale);
 
 				app.addCliente(newCliente);
+				Serializator.serializzaOggetto(app.getClienti(), currentDirectory + "clienti");
+				risp = false;
 
 			} catch (ParseException | ClienteException e) {
 				System.out.println(e.getMessage());
 				System.out.println("Riprovare(true/false)?");
-				risp = scan.nextBoolean();
+				risp = Boolean.parseBoolean(stdin.readLine());
 			}
 		}
-
-		scan.close();
 	}
 
-	public void creaDipendente(Applicazione app) {
-		Scanner scan = new Scanner(System.in);
+	private static void creaDipendente(Applicazione app) throws IOException {
 		boolean risp = true;
 
 		while (risp) {
 			try {
-				System.out.print("Inserire nome");
-				String nome = scan.nextLine();
+				System.out.print("Inserire nome: ");
+				String nome = stdin.readLine();
 
-				System.out.print("Inserire cognome");
-				String cognome = scan.nextLine();
+				System.out.print("Inserire cognome: ");
+				String cognome = stdin.readLine();
 
-				System.out.print("Inserire data di nascita");
-				Date dataDiNascita = new SimpleDateFormat("dd/MM/yyyy").parse(scan.nextLine());
+				System.out.print("Inserire data di nascita(dd/MM/yyyy): ");
+				Date dataDiNascita = new SimpleDateFormat("dd/MM/yyyy").parse(stdin.readLine());
 
-				System.out.print("Inserire codice dipendente");
-				String codiceDipendente = scan.nextLine();
-				Dipendente newDipendente = new Dipendente(nome, cognome, dataDiNascita, codiceDipendente);
+				System.out.print("Inserire luogo di nascita: ");
+				String luogoDiNascita = stdin.readLine();
+
+				System.out.print("Inserire codice dipendente: ");
+				String codiceDipendente = stdin.readLine();
+				Dipendente newDipendente = new Dipendente(nome, cognome, dataDiNascita, luogoDiNascita,
+						codiceDipendente);
 
 				app.addDipendente(newDipendente);
+				Serializator.serializzaOggetto(app.getDipendenti(), currentDirectory + "dipendenti");
+				risp = false;
 
 			} catch (ParseException | DipendenteException e) {
 				System.out.println(e.getMessage());
 				System.out.println("Riprovare(true/false)?");
-				risp = scan.nextBoolean();
+				risp = Boolean.parseBoolean(stdin.readLine());
 			}
 		}
-
-		scan.close();
 	}
 
-	public void removeDipendente(Applicazione app) {
-		Scanner scan = new Scanner(System.in);
+	private static void removeDipendente(Applicazione app) throws IOException {
 		try {
 			System.out.println("inserire codice dipendente da eliminare");
-			String codice = scan.nextLine();
+			String codice = stdin.readLine();
 			app.removeDipendente(codice);
+			Serializator.serializzaOggetto(app.getDipendenti(), currentDirectory + "dipendenti");
 		} catch (AppException e) {
 			System.out.println(e.getMessage());
 		}
-		scan.close();
 	}
 
-	public void addSmartphone(Applicazione app) {
-		Scanner scan = new Scanner(System.in);
+	private static void addSmartphone(Applicazione app) throws IOException {
 		Smartphone smartphone = null;
 		boolean risp = true;
 
 		while (risp) {
 			try {
 				System.out.print("inserire codice IMEI:");
-				int codiceIMEI = scan.nextInt();
+				long codiceIMEI = Long.parseLong(stdin.readLine());
 
 				System.out.print("inserire modello:");
-				String modello = scan.nextLine();
+				String modello = stdin.readLine();
 
 				System.out.print("inserire memoria:");
-				int memoria = scan.nextInt();
+				int memoria = Integer.parseInt(stdin.readLine());
 
 				System.out.print("inserire ram:");
-				int ram = scan.nextInt();
+				int ram = Integer.parseInt(stdin.readLine());
 
 				System.out.print("inserire processore:");
-				String processore = scan.nextLine();
+				String processore = stdin.readLine();
 
 				System.out.print("inserire risoluzione:");
-				String risoluzione = scan.nextLine();
+				String risoluzione = stdin.readLine();
 
 				System.out.print("inserire nome dispositivo:");
-				String nomeDispositivo = scan.nextLine();
+				String nomeDispositivo = stdin.readLine();
 
 				System.out.print("inserire marca:");
-				String marca = scan.nextLine();
+				String marca = stdin.readLine();
 
 				System.out.print("doppia fotocamera?(true/false):");
-				if (scan.nextBoolean()) {
+				if (Boolean.parseBoolean(stdin.readLine())) {
 					System.out.print("riconoscimento vocale e riconoscimento impronta?(true/false):");
-					if (scan.nextBoolean()) {
+					if (Boolean.parseBoolean(stdin.readLine())) {
 						smartphone = new SmartphoneAvanzato(codiceIMEI, modello, memoria, ram, processore, risoluzione,
 								nomeDispositivo, marca);
 					} else {
@@ -218,110 +260,106 @@ public class Main {
 							nomeDispositivo, marca);
 				}
 				app.addSmartphone(smartphone);
+				Serializator.serializzaOggetto(app.getCatalogoSmartphone(), currentDirectory + "catalogo_smartphone");
 				risp = false;
-			} catch (AppException e) {
+			} catch (NumberFormatException e) {
 				System.out.println(e.getMessage());
-				System.out.println("Riprovare?(true/false)");
-				risp = scan.nextBoolean();
+				System.out.println("Riprovare(true/false)?");
+				risp = Boolean.parseBoolean(stdin.readLine());
 			} catch (Exception e) {
 				e.printStackTrace();
 				risp = false;
 			}
 
 		}
-		scan.close();
 
 	}
 
-	public void venditaSmartphone(Applicazione app) {
+	private static void venditaSmartphone(Applicazione app) throws IOException {
 		Vendita vendita = null;
 		boolean risp = true;
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Inserire prezzo:");
-		double prezzo = scan.nextFloat();
 		while (risp) {
 			try {
+				System.out.println("Inserire prezzo:");
+				double prezzo = Double.parseDouble(stdin.readLine());
 				System.out.println("Inserire codice dipendente:");
-				String codiceDipendente = scan.nextLine();
+				String codiceDipendente = stdin.readLine();
 				Dipendente dipendente = app.getDipendenteDaCodice(codiceDipendente);
 
 				System.out.println("Inserire codice fiscale cliente:");
-				String codiceCliente = scan.nextLine();
+				String codiceCliente = stdin.readLine();
 				Cliente cliente = app.getClienteDaCodice(codiceCliente);
 
 				vendita = new Vendita(new Date(), prezzo, dipendente);
 				System.out.println("Inserire numero smartphone venduti");
-				int smartphoneVenduti = scan.nextInt();
+				int smartphoneVenduti = Integer.parseInt(stdin.readLine());
 				while (smartphoneVenduti != 0) {
 					System.out.println("Inserire codice IMEI smartphone");
-					int codiceIMEI = scan.nextInt();
+					long codiceIMEI = Long.parseLong(stdin.readLine());
 					vendita.addSmartphone(app.getSmartphoneDaCodice(codiceIMEI));
 					smartphoneVenduti--;
 				}
 				app.venditaSmartphone(vendita, cliente);
+				Serializator.serializzaOggetto(app.getCatalogoSmartphone(), currentDirectory + "catalogo_smartphone");
 				risp = false;
-			} catch (AppException e) {
-				e.printStackTrace();
-				System.out.println("Noleggio non riuscito. Riprovare?(true/false)");
-				risp = scan.nextBoolean();
+			} catch (AppException | NumberFormatException e) {
+				System.out.println(e.getMessage() + "." + " Riprovare?(true/false)");
+				risp = Boolean.parseBoolean(stdin.readLine());
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("Vendita non riuscita");
 				risp = false;
 			}
 		}
-		scan.close();
 	}
 
-	public void noleggioSmartphone(Applicazione app) {
+	private static void noleggioSmartphone(Applicazione app) throws IOException {
 		Noleggio noleggio = null;
 		boolean risp = true;
-		Scanner scan = new Scanner(System.in);
-
-		System.out.println("Inserire prezzo:");
-		double prezzo = scan.nextFloat();
-
-		System.out.println("Inserire data fine noleggio:");
-		String dataFineNoleggio = scan.nextLine();
 
 		while (risp) {
 			try {
+				System.out.println("Inserire prezzo:");
+				double prezzo = Double.parseDouble(stdin.readLine());
+
+				System.out.println("Inserire data fine noleggio:");
+				String dataFineNoleggio = stdin.readLine();
 				System.out.println("Inserire codice dipendente:");
-				String codiceDipendente = scan.nextLine();
+				String codiceDipendente = stdin.readLine();
 				Dipendente dipendente = app.getDipendenteDaCodice(codiceDipendente);
 
 				System.out.println("Inserire codice fiscale cliente:");
-				String codiceCliente = scan.nextLine();
+				String codiceCliente = stdin.readLine();
 				Cliente cliente = app.getClienteDaCodice(codiceCliente);
 
 				noleggio = new Noleggio(new Date(), prezzo, dipendente,
 						new SimpleDateFormat("dd/MM/yyyy").parse(dataFineNoleggio));
 
 				System.out.println("Inserire numero smartphone noleggiati");
-				int smartphoneNoleggiati = scan.nextInt();
+				int smartphoneNoleggiati = Integer.parseInt(stdin.readLine());
 				while (smartphoneNoleggiati != 0) {
 					System.out.println("Inserire codice IMEI smartphone");
-					int codiceIMEI = scan.nextInt();
+					long codiceIMEI = Long.parseLong(stdin.readLine());
 					noleggio.addSmartphone(app.getSmartphoneDaCodice(codiceIMEI));
 					smartphoneNoleggiati--;
 				}
 				app.noleggiaSmartphone(noleggio, cliente);
+				Serializator.serializzaOggetto(app.getCatalogoSmartphone(), currentDirectory + "catalogo_smartphone");
 				risp = false;
 
-			} catch (ClienteException | DipendenteException | AppException e) {
+			} catch (ClienteException | DipendenteException | AppException | NumberFormatException e) {
 				System.out.println(e.getMessage());
 				System.out.println("Noleggio non riuscito. Riprovare?(true/false)");
-				risp = scan.nextBoolean();
+				risp = Boolean.parseBoolean(stdin.readLine());
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("Noleggio non riuscito");
 				risp = false;
 			}
 		}
-		scan.close();
 	}
 
-	public void elencoSmartphoneNoleggiati(Applicazione app) {
+	private static void elencoSmartphoneNoleggiati(Applicazione app) {
 		try {
 			PrintWriter writeOnFile = new PrintWriter(
 					new BufferedWriter(new FileWriter(currentDirectory + "//smartphoneNoleggiati.txt")));
@@ -335,10 +373,10 @@ public class Main {
 		}
 	}
 
-	public void elencoSMartphoneMaiNoleggiati(Applicazione app) {
+	private static void elencoSMartphoneMaiNoleggiati(Applicazione app) {
 		try {
 			PrintWriter writeOnFile = new PrintWriter(
-					new BufferedWriter(new FileWriter("smartphone_mai_noleggiati.txt")));
+					new BufferedWriter(new FileWriter(currentDirectory + "//smartphone_mai_noleggiati.txt")));
 			for (Smartphone smartphone : app.elencoSmartphoneMaiNoleggiati()) {
 				writeOnFile.print(smartphone.toString() + '\n');
 			}
@@ -349,76 +387,45 @@ public class Main {
 		}
 	}
 
-	public void elencoSmartphoneVendutiDaDipendente(Applicazione app) {
-		Scanner scan = new Scanner(System.in);
+	private static void elencoSmartphoneVendutiDaDipendente(Applicazione app) throws IOException {
 		boolean risp = true;
 		while (risp) {
 			try {
 				System.out.println("Inserire codice dipendente:");
-				String codiceDipendente = scan.nextLine();
+				String codiceDipendente = stdin.readLine();
 				Dipendente dipendente = app.getDipendenteDaCodice(codiceDipendente);
-				PrintWriter writeOnFile = new PrintWriter(new BufferedWriter(
-						new FileWriter("smartphone_noleggiati_da_dipendente_" + codiceDipendente + ".txt")));
+				PrintWriter writeOnFile = new PrintWriter(new BufferedWriter(new FileWriter(
+						currentDirectory + "//smartphone_noleggiati_da_dipendente_" + codiceDipendente + ".txt")));
 				for (Smartphone smartphone : app.smartphoneVendutiDaDipendente(dipendente)) {
 					writeOnFile.print(smartphone.toString() + '\n');
 				}
 				writeOnFile.close();
 				System.out.println("elenco stampato");
 				risp = false;
-			} catch (IOException e) {
-				e.printStackTrace();
 			} catch (AppException e) {
 				System.out.println("Riprovare?(true/false)");
-				risp = scan.nextBoolean();
+				risp = Boolean.parseBoolean(stdin.readLine());
 				e.printStackTrace();
 			}
 		}
-		scan.close();
 	}
 
-	public void fineNoleggio(Applicazione app) {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("scrivere codice noleggio:");
-		int codiceNoleggio = scan.nextInt();
-		if (!app.fineNoleggio(codiceNoleggio))
-			System.out.println("Noleggio finito dopo il tempo stabilito");
-		scan.close();
-	}
-
-	public void serializzaOggetto(Object obj, String fileSerializzato) {
-		FileOutputStream outFile;
-		try {
-			outFile = new FileOutputStream(currentDirectory + "/" + fileSerializzato);
-			ObjectOutputStream outStream = new ObjectOutputStream(outFile);
-			outStream.writeObject(obj);
-			outFile.close();
-			outStream.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("ERRORE: file non trovato");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+	private static void fineNoleggio(Applicazione app) throws IOException {
+		boolean risp = true;
+		while (risp) {
+			try {
+				System.out.println("scrivere codice noleggio:");
+				int codiceNoleggio = Integer.parseInt(stdin.readLine());
+				if (!app.fineNoleggio(app.getNoleggioDaCodice(codiceNoleggio)))
+					System.out.println("Noleggio finito dopo il tempo stabilito");
+				Serializator.serializzaOggetto(app.getCatalogoSmartphone(), currentDirectory + "catalogo_smartphone");
+				risp = false;
+			} catch (NumberFormatException | AppException e) {
+				System.out.println(e.getMessage());
+				System.out.println("Riprovare?(true/false)");
+				risp = Boolean.parseBoolean(stdin.readLine());
+			}
 		}
-
-	}
-
-	public Object deserializzaOggetto(String fileSerializzato) {
-		Object risultato = null;
-		try {
-			FileInputStream inFile = new FileInputStream(currentDirectory + "/" + fileSerializzato);
-			ObjectInputStream inStream = new ObjectInputStream(inFile);
-			risultato = inStream.readObject();
-			inFile.close();
-			inStream.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("ERRORE: file non trovato");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return risultato;
 	}
 
 }

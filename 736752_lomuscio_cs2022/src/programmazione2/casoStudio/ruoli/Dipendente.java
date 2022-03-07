@@ -17,7 +17,7 @@ public class Dipendente extends AbstractPersona {
 	 */
 	private static final long serialVersionUID = -6181282734302979351L;
 	private String id;
-	private static int MAX_NOLEGGI;
+	private static int MAX_NOLEGGI = 20;
 
 	/**
 	 * @param nome
@@ -26,10 +26,11 @@ public class Dipendente extends AbstractPersona {
 	 * @param id
 	 * @throws DipendenteException
 	 */
-	public Dipendente(String nome, String cognome, Date dataDiNascita, String id) throws DipendenteException {
-		super(nome, cognome, dataDiNascita);
-		if (id.length() != 10) {
-			throw new DipendenteException("l'id deve contenere esattamente 10 caratteri");
+	public Dipendente(String nome, String cognome, Date dataDiNascita, String luogoDiNascita, String id)
+			throws DipendenteException {
+		super(nome, cognome, dataDiNascita, luogoDiNascita);
+		if (!id.matches("[a-zA-Z0-9]{10}")) {
+			throw new DipendenteException("ID dipendente non valido");
 		}
 		this.id = id;
 	}

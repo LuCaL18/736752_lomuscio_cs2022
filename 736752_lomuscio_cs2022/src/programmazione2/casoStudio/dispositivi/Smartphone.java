@@ -11,7 +11,7 @@ import java.lang.Cloneable;
  */
 public interface Smartphone extends Cloneable {
 
-	public int getIMEI();
+	public long getIMEI();
 
 	public String getModello();
 

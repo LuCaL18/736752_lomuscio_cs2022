@@ -26,7 +26,7 @@ public class SmartphoneAvanzato extends SmartphoneMedio {
 	 * @param nomeDispositivo
 	 * @param marca
 	 */
-	public SmartphoneAvanzato(int iMEI, String modello, int memoria, int ram, String processore, String risoluzione,
+	public SmartphoneAvanzato(long iMEI, String modello, int memoria, int ram, String processore, String risoluzione,
 			String nomeDispositivo, String marca) {
 		super(iMEI, modello, memoria, ram, processore, risoluzione, nomeDispositivo, marca);
 	}

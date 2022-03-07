@@ -16,8 +16,10 @@ public interface Persona {
 	public String getCognome();
 
 	public Date getDataDiNascita();
+	
+	public String getLuogoDiNascita();
 
-	public void setSmartphoneNoleggiati(int smartphoneNonPiuNoleggiati);
+	public void resetSmartphoneNoleggiati();
 
 	public void addNoleggio(int smartphoneDaNoleggiare) throws Exception;
 }

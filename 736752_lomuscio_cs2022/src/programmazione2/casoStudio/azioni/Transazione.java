@@ -16,7 +16,7 @@ import programmazione2.casoStudio.ruoli.Dipendente;
 public interface Transazione {
 
 	public Set<Smartphone> getSmartphone();
-	
+
 	public int getCodiceTransazione();
 
 	public Date getData();

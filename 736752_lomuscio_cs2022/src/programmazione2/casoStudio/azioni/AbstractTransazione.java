@@ -16,7 +16,7 @@ import programmazione2.casoStudio.ruoli.Dipendente;
  * @author lucal
  *
  */
-abstract class AbstractTransazione implements Transazione,Serializable {
+abstract class AbstractTransazione implements Transazione, Serializable {
 
 	/**
 	 * 
@@ -69,6 +69,20 @@ abstract class AbstractTransazione implements Transazione,Serializable {
 	@Override
 	public Dipendente getDipendente() {
 		return dipendente;
+	}
+
+	/**
+	 * @return the codicePrec
+	 */
+	public static int getCodicePrec() {
+		return codicePrec;
+	}
+
+	/**
+	 * @param codicePrec the codicePrec to set
+	 */
+	public static void setCodicePrec(int codicePrec) {
+		AbstractTransazione.codicePrec = codicePrec;
 	}
 
 	@Override
