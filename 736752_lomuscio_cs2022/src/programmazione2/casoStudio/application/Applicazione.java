@@ -305,7 +305,6 @@ public class Applicazione {
 	public void close() {
 		long delay = this.schedFuture.getDelay(TimeUnit.MILLISECONDS);
 		this.service.shutdown();
-		Serializator.serializzaOggetto(delay, "delaySchedule");
 		Map<String, Object> args = new LinkedHashMap<String, Object>();
 		args.put("close_timestamp", new Date());
 		args.put("delay", delay);
